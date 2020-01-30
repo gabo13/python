@@ -3,7 +3,7 @@
 from Tkinter import *
 from math import pi
 
-class ChoiceVibra(Frame)
+class ChoiceVibra(Frame):
     """Cursor-ok"""
     def __init__(self, boss=None, colo='red'):
         Frame.__init__(self)
@@ -13,14 +13,14 @@ class ChoiceVibra(Frame)
 
         Checkbutton(self, text='Rajzol', variable=self.chk, fg=self.colo, command=self.setCurve).pack(side=LEFT)
 
-        Scale(self, length=150, urient=HORIZONTAL, sliderlength=25,
+        Scale(self, length=150, orient=HORIZONTAL, sliderlength=25,
               label='Frekvencia (Hz): ', from_=1., to=9., tickinterval =2,
               resolution=0.25,
               showvalue=0, command=self.setFrequency).pack(side=LEFT)
-        Scale(self, length=150, urient=HORIZONTAL, sliderlength=15,
+        Scale(self, length=150, orient=HORIZONTAL, sliderlength=15,
               label='Fázis (fok): ', from_=-180, to=180, tickinterval =90,
               showvalue=0, command=self.setPhase).pack(side=LEFT)
-        Scale(self, length=150, urient=HORIZONTAL, sliderlength=25,
+        Scale(self, length=150, orient=HORIZONTAL, sliderlength=25,
               label='Amplitudó: ', from_=1, to=9, tickinterval =2,
               showvalue=0, command=self.setAmplitude).pack(side=LEFT)
 
@@ -37,16 +37,16 @@ class ChoiceVibra(Frame)
         self.event_generate('<Control-Z>')
 
     def setAmplitude(self, a):
-        self.amp1 = float(a)
+        self.ampl = float(a)
         self.event_generate('<Control-Z>')
 
 if __name__ == '__main__':
     def showAll(event=None):
         lab.configure(text='%s - %s - %s - %s' % (fra.chk.get(), fra.freq, fra.phase, fra.ampl))
-        root = Tk()
-        fra = ChoiceVibra(root, 'navy')
-        fra.pack(side=TOP)
-        lab = Label(root, text='test')
-        lab.pack()
-        rootbind('<Control-Z>', ShowAll)
-        root.mainloop()
+    root = Tk()
+    fra = ChoiceVibra(root, 'navy')
+    fra.pack(side=TOP)
+    lab = Label(root, text='test')
+    lab.pack()
+    root.bind('<Control-Z>', showAll)
+    root.mainloop()
