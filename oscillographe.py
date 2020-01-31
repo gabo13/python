@@ -16,12 +16,12 @@ class OscilloGraph(Canvas):
             stx = 10 + t*step
             self.create_line(stx, height_/2-4, stx, height_/2+4)
 
-    def drawCurve(self, freq=1, phase=0, amp1=10, colo='red'):
+    def drawCurve(self, freq=1, phase=0, ampl=10, colo='red'):
         """1sec-re eső időgörbe rajzolása"""
         curve = []
         step = (self.width_-25)/1000.
         for t in range(0,1001,5):
-            e = amp1*sin(2*pi*freq*t/1000-phase)
+            e = ampl*sin(2*pi*freq*t/1000-phase)
             x = 10 + t*step
             y = self.height_/2-e*self.height_/25
             curve.append((x,y))
