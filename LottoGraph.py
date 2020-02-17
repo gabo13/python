@@ -5,16 +5,16 @@
 # 2020. 02. 01.
 
 import urllib
-import Tkinter as tk
+from Tkinter import *
 
-class MainFrame(tk.Frame):
+class MainFrame(Frame):
     def __init__(self):
-        tk.Frame.__init__(self)
+        Frame.__init__(self)
         
-        T = tk.Text(self, height=2, width=10)
+        T = Text(self, height=2, width=10)
         
         T.pack()
-        T.insert(tk.END, 'This is a text')
+        T.insert(END, 'This is a text')
         
 
 class LottoGraph():
@@ -48,6 +48,5 @@ class LottoGraph():
 
 if __name__ == '__main__':
     LottoGraph()
-    root = tk.Tk()
-    MainFrame().pack(root)
-    root.mainloop()
+    mf=MainFrame()
+    mf.mainloop()
