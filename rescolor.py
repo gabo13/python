@@ -58,6 +58,9 @@ class Application:
         print("changeColour")
 
 # Főprogram:
-from Tkinter import *
+try:
+    from Tkinter import *
+except ImportError:
+    from tkinter import *
 from math import log10
 f = Application()

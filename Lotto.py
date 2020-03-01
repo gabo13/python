@@ -1,8 +1,12 @@
+# -*- Coding:Utf-8 -*-
 from urllib.request import urlopen
-import re
-
+import re, ssl
+URL = "https://bet.szerencsejatek.hu/cmsfiles/otos.csv"
 # file letöltése
-response = urlopen("https://bet.szerencsejatek.hu/cmsfiles/otos.csv")
+ctx = ssl.create_default_context()
+ctx.check_hostname = False
+ctx.verify_mode = ssl.CERT_NONE
+response = urlopen(URL, context=ctx)
 with open("otos.csv", "wb") as f:
     f.write(response.read())
 # file betöltése data nevü 2d-s tömbbe
@@ -10,8 +14,10 @@ data = []
 with open("otos.csv", "r") as f:
     for line in f:
         temp = list(line.rstrip().split(";"))
+        temp = list(map(int,temp[0:2]+temp[11:16]))
         data.append(temp)
-
+data.reverse()
+#print(data)
         
 def statisztika(data):
     print("---------------------------")
@@ -19,21 +25,36 @@ def statisztika(data):
     print("       előfordulás         ")
     print("---------------------------")
     print("szám, húzás1...húzás5, összesen")
-    stat1 = {i:0 for i in range(1,91)} #90 elemü dictionary-k feltöltve 0-val
-    stat2 = {i:0 for i in range(1,91)}
-    stat3 = {i:0 for i in range(1,91)}
-    stat4 = {i:0 for i in range(1,91)}
-    stat5 = {i:0 for i in range(1,91)}
+    stat1 = [0]*90 #90 elemü lista feltöltve 0-val
+    stat2 = [0]*90
+    stat3 = [0]*90
+    stat4 = [0]*90
+    stat5 = [0]*90
+    szum = [0]*90
     for line in data:
-        stat1[int(line[11])]=stat1[int(line[11])]+1
-        stat2[int(line[12])]=stat2[int(line[12])]+1
-        stat3[int(line[13])]=stat3[int(line[13])]+1
-        stat4[int(line[14])]=stat4[int(line[14])]+1
-        stat5[int(line[15])]=stat5[int(line[15])]+1
-    for i in range(1,91):
-        szum = stat1[i]+stat2[i]+stat3[i]+stat4[i]+stat5[i]
-        print("|{0:3d} | {1:3d} | {2:3d} | {3:3d} | {4:3d} | {5:3d} | {6:3d}".format(i,stat1[i],stat2[i],stat3[i],stat4[i],stat5[i],szum))
-
+        stat1[line[2]-1]=stat1[line[2]-1]+1
+        stat2[line[3]-1]=stat1[line[3]-1]+1
+        stat3[line[4]-1]=stat1[line[4]-1]+1
+        stat4[line[5]-1]=stat1[line[5]-1]+1
+        stat5[line[6]-1]=stat1[line[6]-1]+1
+    for i in range(0,90):
+        szum[i] = stat1[i]+stat2[i]+stat3[i]+stat4[i]+stat5[i]
+        print("|{0:3d} | {1:3d} | {2:3d} | {3:3d} | {4:3d} | {5:3d} | {6:3d}".format(i+1,stat1[i],stat2[i],stat3[i],stat4[i],stat5[i],szum[i]))
+    try:
+        import matplotlib.pyplot as plt
+    except ImportError:
+        print("Pyplot not installed")
+    value = range(0,90)
+    plt.plot(value,szum, color='r')
+    plt.plot(value,stat1, color='g')
+    plt.plot(value,stat2, color='b')
+    plt.plot(value,stat3, color='y')
+    plt.plot(value,stat4, color='m')
+    plt.plot(value,stat5, color='k')
+    plt.ylabel('Előfordulás')
+    plt.show()
+    
+     
 
 def keres(data, numbers):
     print("---------------------------")
@@ -42,12 +63,12 @@ def keres(data, numbers):
     print("---------------------------")
     print("A keresett számok: ",numbers)
     for line in data:
-        A=set(line[11:])
+        A=set(line[2:])
         B=set(numbers)
         intersect = sorted(A&B)
         #print(A, B, intersect)
         if len(intersect) > 1:
-            print("{:2d} találat:{} {}".format(len(intersect),line[:2],intersect))
+            print("{0} találat: {1:9s} {2:14s}".format(len(intersect), ' '.join(map(str,line[:2])), ' '.join(map(str,line[2:]))))
 def menu():
     while True:
         print("******************************************")
@@ -56,7 +77,8 @@ def menu():
         if vez_inp == '1':
             statisztika(data)
         elif vez_inp == '2':
-            keres(data,re.findall(r"(\d+)",input("Kérem a számokat: ")))
+            numbers = re.findall(r"(\d+)",input("Kérem a számokat: "))
+            keres(data,list(map(int,numbers)))
         elif vez_inp=='3':
             break;
             

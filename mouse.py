@@ -1,6 +1,8 @@
 # -*- coding: Utf-8 -*-
-
-from Tkinter import *
+try:
+    from Tkinter import *
+except ImportError:
+    from tkinter import *
 from random import randrange
 
 class Draw(Frame):
