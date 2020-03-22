@@ -3,3 +3,4 @@ print(line)
 temp=list(line.rstrip().split(';'))
 print(temp)
 print(list(map(int,temp[0:2]+temp[11:16])))
+#3287 Libre Calc utolsó sort
