@@ -38,8 +38,6 @@ def start():
                     os.mkdir(ext)
                 print('%s áthelyezése...'%f)
                 os.rename(f, os.path.join(cwd,ext,f))
-    print(get_exif_create_date('test2.jpg'))
-
 
 if __name__ == '__main__':
     start()
